@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { getLambdaStatus } from "../lib/lamda";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock, LogIn, Mail } from "lucide-react";
@@ -15,6 +16,20 @@ export function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const checkLambda = async () => {
+  try {
+    const data = await getLambdaStatus();
+
+    console.log("Lambda Response:", data);
+
+    alert(
+      `Status: ${data.status}\nMessage: ${data.message}`
+    );
+  } catch (error) {
+    console.error(error);
+    alert("Failed to call Lambda");
+  }
+};
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -98,6 +113,10 @@ export function Login() {
               Forgot Password?
             </a>
           </div>
+
+          <button type="button" onClick={checkLambda}>
+            Check Lambda
+          </button>
 
           <Button
             type="submit"
